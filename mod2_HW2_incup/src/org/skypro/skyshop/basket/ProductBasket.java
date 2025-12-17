@@ -1,6 +1,7 @@
 package org.skypro.skyshop.basket;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.skypro.skyshop.product.Product;
 
@@ -16,27 +17,23 @@ public class ProductBasket {
     }
 
     public int getCostBasket() {
-        int cost = 0;
-
-        for (Map.Entry<String, Set<Product>> el : mapProdBasket.entrySet())
-        {
-            for(Product prod : el.getValue()) {
-                if (prod != null) {
-                    cost += prod.getPriceProduct();
-                }
-            }
+        int cost;
+        try (Stream<Product> productStream = mapProdBasket.values().stream().flatMap(Collection::stream)) {
+            cost = productStream.mapToInt(Product::getPriceProduct).sum();
         }
         return cost;
     }
 
     public void printBasket() {
         int i = 0;
-        for (Map.Entry<String, Set<Product>> el : mapProdBasket.entrySet())
+        Stream<Product> productStream = mapProdBasket.values().stream().flatMap(Collection::stream);
+
+        Stream<Product> stream = productStream.filter(Objects::nonNull);
+
+        for (Product el : stream.toList())
         {
-            if (el != null) {
-                i++;
-                System.out.println(el.getKey() + " " + el.getValue());
-            }
+            i++;
+            System.out.println(el.getText() + " " + el.getPriceProduct());
         }
         if (i > 0) {
             System.out.println("Итого: " + this.getCostBasket());

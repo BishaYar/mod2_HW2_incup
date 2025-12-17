@@ -29,7 +29,7 @@ public class App {
         printEmptyDelList(basket1.deleteProductInBasket("мед"));
 
         System.out.println("=== Печать удаленных товаров, товара нет в корзине ===");
-         printEmptyDelList(basket1.deleteProductInBasket("бур"));
+        // printEmptyDelList(basket1.deleteProductInBasket("бур"));
 
         System.out.println("=== Печать содержимого корзины ===");
         basket1.printBasket();
