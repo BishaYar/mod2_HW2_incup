@@ -16,32 +16,18 @@ public class ProductBasket {
     }
 
     public int getCostBasket() {
-        int cost = 0;
-
-        for (Map.Entry<String, Set<Product>> el : mapProdBasket.entrySet())
-        {
-            for(Product prod : el.getValue()) {
-                if (prod != null) {
-                    cost += prod.getPriceProduct();
-                }
-            }
-        }
-        return cost;
+        return mapProdBasket.values().stream().flatMap(Collection::stream)
+                .mapToInt(Product::getPriceProduct).sum();
     }
 
     public void printBasket() {
-        int i = 0;
-        for (Map.Entry<String, Set<Product>> el : mapProdBasket.entrySet())
-        {
-            if (el != null) {
-                i++;
-                System.out.println(el.getKey() + " " + el.getValue());
-            }
-        }
-        if (i > 0) {
-            System.out.println("Итого: " + this.getCostBasket());
-        } else {
+        if (mapProdBasket.isEmpty()) {
             System.out.println("В корзине пусто");
+        } else {
+            mapProdBasket.values().stream().flatMap(Collection::stream)
+                    .filter(Objects::nonNull)
+                    .forEach(System.out::println);
+            System.out.println("Итого: " + this.getCostBasket());
         }
     }
 }
